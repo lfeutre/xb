@@ -2,12 +2,19 @@
 
 *LFE/Erlang library for the XBee API*
 
-## Introduction
+## Table of Contents
+
+* [Introduction](#introduction-)
+* [Installation](#installation-)
+* [Usage](#usage-)
+* [Resources](#resources-)
+
+## Introduction [&#x219F;](#table-of-contents)
 
 Add content to me here!
 
 
-## Installation
+## Installation [&#x219F;](#table-of-contents)
 
 Just add it to your ``rebar.config`` deps:
 
@@ -27,11 +34,11 @@ And then do the usual:
 ```
 
 
-## Usage
+## Usage [&#x219F;](#table-of-contents)
 
 Add content to me here!
 
-## Resources
+## Resources [&#x219F;](#table-of-contents)
 
  * [Building WSN with MQTT, RPi & Arduino](https://www.erlang-factory.com/upload/presentations/807/ZviMQTTS_for_EUC2013.pdf) (Erlang)
  * [XBee - XBee / XBee-PRO - RF Modules - 802.15.4 Protocol](http://ftp1.digi.com/support/documentation/90000982_S.pdf) - API Operation for the XBee/XBee-PRO RF Module, starts at page 89 (series 1)
