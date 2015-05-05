@@ -16,3 +16,10 @@
    (checksum rest (+ acc x)))
   (((binary) acc)
    (band acc #xff)))
+
+(defun str->bin (data-str)
+  (list_to_binary
+    (lists:map
+      (lambda (x)
+        (list_to_integer x 16))
+      (string:tokens data-str " "))))
