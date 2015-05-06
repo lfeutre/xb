@@ -1,4 +1,5 @@
 .PHONY: docs
+REPO = git@github.com:oubiwann/xb.git
 DOCS_BUILD_DIR = docs/build
 
 devdocs:
@@ -8,5 +9,9 @@ docs:
 	cd docs && rake build
 
 publish: docs
-	git push origin \
-	`git subtree split --prefix $(DOCS_BUILD_DIR) master`:gh-pages --force
+	rm -rf $(DOCS_BUILD_DIR)/.git
+	cd $(DOCS_BUILD_DIR) && \
+	git init && \
+	git add * &> /dev/null && \
+	git commit -a -m "Generated content." &> /dev/null && \
+	git push -f $(REPO) master:gh-pages
