@@ -1,4 +1,5 @@
 .PHONY: docs
+DOCS_BUILD_DIR = docs/build
 
 devdocs:
 	cd docs && bundle exec middleman server
@@ -6,5 +7,6 @@ devdocs:
 docs:
 	cd docs && rake build
 
-publish:
-	cd docs && rake publish
+publish: docs
+	git push origin \
+	`git subtree split --prefix $(DOCS_BUILD_DIR) master`:gh-pages --force
