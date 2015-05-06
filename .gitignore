@@ -9,3 +9,24 @@ bin/expm
 *.dump
 .rebar
 logs/*
+docs/build
+docs/*.gem
+docs/*.rbc
+docs/.bundle
+docs/.config
+docs/coverage
+docs/InstalledFiles
+docs/lib/bundler/man
+docs/pkg
+docs/rdoc
+docs/spec/reports
+docs/test/tmp
+docs/test/version_tmp
+docs/tmp
+*.DS_STORE
+.cache
+# YARD artifacts
+.yardoc
+_yardoc
+doc/
+.idea/
