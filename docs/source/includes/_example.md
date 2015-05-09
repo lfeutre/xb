@@ -16,6 +16,10 @@ Example "tips for success" text.
 Example notice text.
 </aside>
 
+<aside class="idea">
+Example idea text.
+</aside>
+
 <aside class="warning">
 Example warning text.
 </aside>

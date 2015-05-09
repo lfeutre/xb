@@ -73,6 +73,11 @@
   content: "\f046";
 }
 
+%icon-success {
+  @extend %icon;
+  content: "\f046";
+}
+
 %icon-minus-circle {
   @extend %icon;
   content: "\f056";
@@ -94,6 +99,11 @@
 }
 
 %icon-info-circle {
+  @extend %icon;
+  content: "\f05a";
+}
+
+%icon-info {
   @extend %icon;
   content: "\f05a";
 }
