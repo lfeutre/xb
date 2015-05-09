@@ -21,33 +21,149 @@
 
 %icon-exclamation-sign {
   @extend %icon;
-  content: "\e600";
+  content: "\f071";
 }
 %icon-question-sign {
   @extend %icon;
-  content: "\e601";
+  content: "\f059";
 }
 %icon-info-sign {
   @extend %icon;
-  content: "\e602";
+  content: "\f05a";
 }
 %icon-remove-sign {
   @extend %icon;
-  content: "\e603";
+  content: "\f00d";
 }
 %icon-plus-sign {
   @extend %icon;
-  content: "\e604";
+  content: "\f067";
 }
 %icon-minus-sign {
   @extend %icon;
-  content: "\e605";
+  content: "\f056";
 }
 %icon-ok-sign {
   @extend %icon;
-  content: "\e606";
+  content: "\f046";
 }
+
 %icon-search {
   @extend %icon;
-  content: "\e607";
+  content: "\f002";
+}
+
+%icon-close {
+  @extend %icon;
+  content: "\f00d";
+}
+
+%icon-remove {
+  @extend %icon;
+  content: "\f00d";
+}
+
+%icon-times {
+  @extend %icon;
+  content: "\f00d";
+}
+
+%icon-check-square-o {
+  @extend %icon;
+  content: "\f046";
+}
+
+%icon-minus-circle {
+  @extend %icon;
+  content: "\f056";
+}
+
+%icon-do-not-enter {
+  @extend %icon;
+  content: "\f056";
+}
+
+%icon-danger {
+  @extend %icon;
+  content: "\f056";
+}
+
+%icon-question-circle {
+  @extend %icon;
+  content: "\f059";
+}
+
+%icon-info-circle {
+  @extend %icon;
+  content: "\f05a";
+}
+
+%icon-plus {
+  @extend %icon;
+  content: "\f067";
+}
+
+%icon-minus {
+  @extend %icon;
+  content: "\f068";
+}
+
+%icon-exclamation-circle {
+  @extend %icon;
+  content: "\f06a";
+}
+
+%icon-important {
+  @extend %icon;
+  content: "\f06a";
+}
+
+%icon-warning-triangle {
+  @extend %icon;
+  content: "\f071";
+}
+
+%icon-exclamation-triangle {
+  @extend %icon;
+  content: "\f071";
+}
+
+%icon-warning {
+  @extend %icon;
+  content: "\f071";
+}
+
+%icon-bolt {
+  @extend %icon;
+  content: "\f0e7";
+}
+
+%icon-flash {
+  @extend %icon;
+  content: "\f0e7";
+}
+
+%icon-lightbulb-o {
+  @extend %icon;
+  content: "\f0eb";
+}
+
+%icon-idea {
+  @extend %icon;
+  content: "\f0eb";
+}
+
+%icon-bug {
+  @extend %icon;
+  content: "\f188";
+}
+
+%icon-child {
+  @extend %icon;
+  content: "\f1ae";
+}
+
+%icon-hubot {
+  @extend %icon;
+  content: "\f09d";
 }
