@@ -35,7 +35,7 @@ match it to the listing from the ``ls`` command to confirm.
 > If you are running xb code from another project, you will need to start the
 > xb client:
 
-```lisp
+```cl
 (xb:start)
 ```
 

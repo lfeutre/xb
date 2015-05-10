@@ -27,3 +27,13 @@ Example warning text.
 <aside class="danger">
 Example danger text.
 </aside>
+
+
+## Raw Serial
+
+```cl
+> (set tty (cereal:start "/dev/tty.usbserial-DA01L2I5" `(#(speed 9600))))
+<0.32.0>
+> (cereal:send tty (binary #x7e #x00 #x04 #x08 #x52 #x4e #x4a #x0d))
+#(send #B(126 0 4 8 82 78 74 13))
+```
