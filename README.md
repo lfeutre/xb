@@ -2,7 +2,7 @@
 
 *LFE/Erlang library for the XBee API*
 
-<img src="resources/images/Ikarie-XB-1-small.png" />
+<img src="docs/source/images/just-xb.png" />
 
 ## Table of Contents
 
