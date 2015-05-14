@@ -24,21 +24,21 @@ Just add it to your ``rebar.config`` deps:
   {deps, [
     ...
     {xb, ".*",
-      {git, "git@github.com:YOURNAME/xb.git", "master"}}
+      {git, "git@github.com:oubiwann/xb.git", "master"}}
       ]}.
 ```
 
 And then do the usual:
 
 ```bash
-    $ rebar get-deps
-    $ rebar compile
+    $ make compile
 ```
 
 
 ## Usage [&#x219F;](#table-of-contents)
 
-Add content to me here!
+Currently under development. See the [docs](http://oubiwann.github.com/xb) for
+current progress.
 
 ## Resources [&#x219F;](#table-of-contents)
 
