@@ -32,8 +32,12 @@ Example danger text.
 ## Raw Serial
 
 ```cl
-> (set tty (cereal:start "/dev/tty.usbserial-DA01L2I5" `(#(speed 9600))))
-<0.32.0>
-> (cereal:send tty (binary #x7e #x00 #x04 #x08 #x52 #x4e #x4a #x0d))
-#(send #B(126 0 4 8 82 78 74 13))
+> (xb:start)
+#(ok started)
+> (xb:open "/dev/tty.usbserial-DA01L2I5" `(#(speed 9600)))
+#(ok opened)
+> (xb:raw-send (binary #x7e #x00 #x04 #x08 #x52 #x4e #x4a #x0d))
+#B(126 0 5 136 82 78 74 2 139)
+> (xb:close)
+#(ok closed)
 ```
