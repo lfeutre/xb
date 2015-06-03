@@ -115,9 +115,11 @@ check-travis: $(LFETOOL) check
 push-all:
 	@echo "Pusing code to github ..."
 	git push --all
-	git push upstream --all
 	git push --tags
-	git push upstream --tags
+	@#git push upstream --all
+	@#git push upstream --tags
+	git push backup --all
+	git push backup --tags
 
 install: compile
 	@echo "Installing xb ..."
