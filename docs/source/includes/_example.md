@@ -41,3 +41,6 @@ Example danger text.
 > (xb:close)
 #(ok closed)
 ```
+
+If you want to, you have the option of by-passing the API modules
+and simply making a direct call to the serial device.
