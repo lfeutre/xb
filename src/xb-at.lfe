@@ -4,16 +4,17 @@
 (defun api-id () #x08)
 
 (defun send
-  ((frame-id command) (when (is_atom command))
+  ((command) (when (is_atom command))
    (logjam:debug (MODULE) 'send/2 "Got atom, converting to sirng ...")
-   (xb-at:send frame-id (atom_to_list command)))
-  ((frame-id command)
-   (let ((frame-id (+ 1 (erlang:rem frame-id #xff))))
+   (xb-at:send (atom_to_list command)))
+  ((command)
+   (let* ((frame-id (xb:get-frame-id))
+          (payload `(,frame-id ,command)))
      (logjam:debug (MODULE)
                    'send/2
                    "API: ~p, Frame ID: ~p, Command: ~p"
                    `(,(api-id) ,frame-id ,command))
-     (xb:send (api-id) (list_to_binary `(,frame-id ,command))))))
+      (xb:send (api-id) (binary payload)))))
 
-(defun send (frame-id command param)
+(defun send (command param)
   'noop)

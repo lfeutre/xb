@@ -1,5 +1,8 @@
+(defrecord xb-state
+  (frame-id 1))
+
 (defrecord frame
-  delimiter
+  (delimiter #x7e)
   length
   api
   payload
