@@ -1,0 +1,719 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>LFE xb API Reference</title>
+
+    <link href="css/screen.css" rel="stylesheet" type="text/css" media="screen" />
+    <link href="css/print.css" rel="stylesheet" type="text/css" media="print" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+      <script src="js/all.js" type="text/javascript"></script>
+
+      <script>
+        $(function() {
+          setupLanguages([null]);
+        });
+      </script>
+  </head>
+
+  <body class="index">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" />
+      </span>
+    </a>
+    <div class="tocify-wrapper">
+      <img src="images/logo.png" />
+        <div class="lang-selector">
+              <a href="#" data-language-name=""></a>
+        </div>
+        <div class="search">
+          <input type="text" class="search" id="input-search" placeholder="Search">
+        </div>
+        <ul class="search-results"></ul>
+      <div id="toc">
+      </div>
+        <ul class="toc-footer">
+            <li><a href='http://github.com/tripit/slate'>Documentation Powered by Slate</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+      <div class="content">
+        
+          <h1 id="introduction">Introduction</h1>
+
+<p><img src="images/just-xb.png" /></p>
+
+<p>[Add notes about XBee]</p>
+
+<p>[Add notes about the XBee API]</p>
+
+<h2 id="supported-versions">Supported Versions</h2>
+
+<p>Currently only the API for Series 1 XBee radios is supported.</p>
+
+<h2 id="lfe">LFE</h2>
+
+<p>[Add notes about LFE]</p>
+
+<h2 id="usage-scenarios">Usage Scenarios</h2>
+
+<p>[Add notes]</p>
+
+<h2 id="additional-resources">Additional Resources</h2>
+
+<ul>
+<li><a href="https://www.erlang-factory.com/upload/presentations/807/ZviMQTTS_for_EUC2013.pdf">Building WSN with MQTT, RPi &amp; Arduino</a> (Erlang)</li>
+<li><a href="http://ftp1.digi.com/support/documentation/90000982_S.pdf">XBee - XBee / XBee-PRO - RF Modules - 802.15.4 Protocol</a> - API Operation for the XBee/XBee-PRO RF Module, starts at page 89 (series 1)</li>
+<li><a href="http://ftp1.digi.com/support/documentation/90000976_W.pdf">XBee / XBee-PRO - ZigBee RF Modules - XBEE2, XBEEPRO2, PRO S2B</a> - API Operation, starts at page 112 (series 2)</li>
+<li><a href="http://ftp1.digi.com/support/utilities/digi_apiframes2.htm">XBee API Packet Generator</a></li>
+<li><a href="https://code.google.com/p/xbee-api/">Java XBee library</a></li>
+<li><a href="https://github.com/markfickett/python-xbee">Python XBee library</a></li>
+<li><a href="https://www.npmjs.com/package/xbee-api">Node.js XBee library</a></li>
+</ul>
+
+          <h1 id="setup">Setup</h1>
+
+<h2 id="xbee:-configuring-the-radio">XBee: Configuring the Radio</h2>
+
+<p>XBee Serie 1 has one set of firmware for both AT Command mode and API mode.
+Hoever, to use API mode, you need to configurre your radio (using XCTU). In
+particular, you will need to set <code class="prettyprint">AP</code> to <code class="prettyprint">2</code> (API enabled w/PPP).</p>
+
+<h2 id="computer:-configuring-serial-communications">Computer: Configuring Serial Communications</h2>
+
+<blockquote>
+<p>First thing you need to do is find out which device your XBee is:</p>
+</blockquote>
+<pre class="highlight shell"><code><span class="gp">$ </span>ls -1rt /dev/tty<span class="k">*</span>
+</code></pre>
+
+<blockquote>
+<p>If you just plugged your radio into a URB device, it should be pretty close
+to the bottom of that listing:</p>
+</blockquote>
+<pre class="highlight shell"><code>...
+/dev/tty.usbserial-DA01L2I5
+...
+</code></pre>
+
+<p>If after listing the devices as shown on the right, you&rsquo;re not sure which of
+those is your XBee, you can start up XCTU, scan for the device, and then
+watch for the name it uses for that device. Once you have that name, you can
+match it to the listing from the <code class="prettyprint">ls</code> command to confirm.</p>
+
+<h2 id="lfe:-starting-the-api">LFE: Starting the API</h2>
+
+<blockquote>
+<p>If you are running xb code from another project, you will need to start the
+xb client:</p>
+</blockquote>
+<pre class="highlight common_lisp"><code><span class="p">(</span><span class="nv">xb:start</span><span class="p">)</span>
+</code></pre>
+
+<p>If you are running the client from the LFE REPL in the xb project directory,
+the client will have been started for you automatically by the <code class="prettyprint">repl</code> and
+<code class="prettyprint">repl-no-deps</code> make targets.</p>
+
+          <h1 id="module-organization">Module Organization</h1>
+
+<p>The LFE xb library&rsquo;s collection of modules is viewable in the
+<a href="https://github.com/oubiwann/xb/tree/master/src">src</a>
+directory. However, the files have appreviated names and there is no obvious
+indication which module is associated with which frame type (or frame type
+ID/API ID). This can be a bit awkward to view.</p>
+
+<p>As such, we have provided two lists of modules below: one is sorted by frame
+type and the other has similar modules grouped together by functionality.</p>
+
+<h2 id="orderedy-frame-type-id">Orderedy Frame Type ID</h2>
+
+<table><thead>
+<tr>
+<th>Frame Type ID</th>
+<th>Frame Type</th>
+<th>LFE Module</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">0xFF</code></td>
+<td>Generic Frame</td>
+<td><code class="prettyprint">src/xb-gen.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x00</code></td>
+<td>Tx64 Request</td>
+<td><code class="prettyprint">src/xb-tx64.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x01</code></td>
+<td>Tx16 Request</td>
+<td><code class="prettyprint">src/xb-tx16.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x08</code></td>
+<td>AT Command</td>
+<td><code class="prettyprint">src/xb-at.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x09</code></td>
+<td>AT Command Queue Register Value</td>
+<td><code class="prettyprint">src/xb-atq.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x10</code></td>
+<td>Transmit Request</td>
+<td><code class="prettyprint">src/xb-txreq.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x11</code></td>
+<td>Explicit Addressing Command Frame</td>
+<td><code class="prettyprint">src/xb-expaddr.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x17</code></td>
+<td>Remote AT Command</td>
+<td><code class="prettyprint">src/xb-atrem.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x20</code></td>
+<td>TX IPv4</td>
+<td><code class="prettyprint">src/xb-txipv4.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x21</code></td>
+<td>Create Source Route</td>
+<td><code class="prettyprint">src/xb-??.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x24</code></td>
+<td>Register Joining Device</td>
+<td><code class="prettyprint">src/xb-regjoin.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x80</code></td>
+<td>Rx64 Indicator</td>
+<td><code class="prettyprint">src/xb-rx64.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x81</code></td>
+<td>Rx16 Indicator</td>
+<td><code class="prettyprint">src/xb-rx16.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x82</code></td>
+<td>DIO/ADC Rx64 Indicator</td>
+<td><code class="prettyprint">src/xb-diorx64.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x83</code></td>
+<td>DIO/ADC Rx16 Indicator</td>
+<td><code class="prettyprint">src/xb-diorx16.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x84</code></td>
+<td>1-Wire Sensor Read-64 Indicator</td>
+<td><code class="prettyprint">src/xb-1wire.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x85</code></td>
+<td>ND Response Indicator</td>
+<td><code class="prettyprint">src/xb-ndresp.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x86</code></td>
+<td>Promiscuous Output Frame</td>
+<td><code class="prettyprint">src/xb-pof.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x87</code></td>
+<td>Remote AT Command Response</td>
+<td><code class="prettyprint">src/xb-atremresp.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x88</code></td>
+<td>AT Command Response</td>
+<td><code class="prettyprint">src/xb-atresp.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x89</code></td>
+<td>Tx Status</td>
+<td><code class="prettyprint">src/xb-txstat.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x8A</code></td>
+<td>Modem Status</td>
+<td><code class="prettyprint">src/xb-modemstat.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x8B</code></td>
+<td>Tx Status</td>
+<td><code class="prettyprint">src/xb-txstat2.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x8D</code></td>
+<td>Route Information Packet</td>
+<td><code class="prettyprint">src/xb-rtinfo.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x8E</code></td>
+<td>Aggregate Addressing Update</td>
+<td><code class="prettyprint">src/xb-aggaddr.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x8F</code></td>
+<td>IO Data Sample Rx Indicator</td>
+<td><code class="prettyprint">src/xb-iosamprx.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x90</code></td>
+<td>Receive Packet</td>
+<td><code class="prettyprint">src/xb-rx.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x91</code></td>
+<td>Explicit Rx Indicator</td>
+<td><code class="prettyprint">src/xb-exprx.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x92</code></td>
+<td>IO Data Sample Rx Indicator</td>
+<td><code class="prettyprint">src/xb-iosamprx2.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x94</code></td>
+<td>XBee Sensor Read Indicator</td>
+<td><code class="prettyprint">src/xb-snsr.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x95</code></td>
+<td>Node Identification Indicator</td>
+<td><code class="prettyprint">src/xb-nodeid.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x97</code></td>
+<td>Remote Command Response</td>
+<td><code class="prettyprint">src/xb-remresp.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0xA0</code></td>
+<td>Over-the-Air Firmware Update Status</td>
+<td><code class="prettyprint">src/xb-otastat.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0xA1</code></td>
+<td>Route Record Indicator</td>
+<td><code class="prettyprint">src/xb-rtrec.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0xA2</code></td>
+<td>Device Authenticated Indicator</td>
+<td><code class="prettyprint">src/xb-devauth.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0xA3</code></td>
+<td>Many to One Route Request Indicator</td>
+<td><code class="prettyprint">src/xb-rtreqm21.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0xA4</code></td>
+<td>Register Joining Device Status</td>
+<td><code class="prettyprint">src/xb-regjoinstat.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0xA5</code></td>
+<td>Join Notification Status</td>
+<td><code class="prettyprint">src/xb.joinstatlfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0xB0</code></td>
+<td>RX IPv4</td>
+<td><code class="prettyprint">src/xb-rxipv4.lfe</code></td>
+</tr>
+</tbody></table>
+
+<h2 id="grouped-by-functionality">Grouped by Functionality</h2>
+
+<table><thead>
+<tr>
+<th>Frame Type ID</th>
+<th>Frame Type</th>
+<th>LFE Module</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code class="prettyprint">0xFF</code></td>
+<td>Generic Frame</td>
+<td><code class="prettyprint">src/xb-gen.lfe</code></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x00</code></td>
+<td>Tx64 Request</td>
+<td><code class="prettyprint">src/xb-tx64.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x01</code></td>
+<td>Tx16 Request</td>
+<td><code class="prettyprint">src/xb-tx16.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x80</code></td>
+<td>Rx64 Indicator</td>
+<td><code class="prettyprint">src/xb-rx64.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x81</code></td>
+<td>Rx16 Indicator</td>
+<td><code class="prettyprint">src/xb-rx16.lfe</code></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x08</code></td>
+<td>AT Command</td>
+<td><code class="prettyprint">src/xb-at.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x09</code></td>
+<td>AT Command Queue Register Value</td>
+<td><code class="prettyprint">src/xb-atq.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x17</code></td>
+<td>Remote AT Command</td>
+<td><code class="prettyprint">src/xb-atrem.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x88</code></td>
+<td>AT Command Response</td>
+<td><code class="prettyprint">src/xb-atresp.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x87</code></td>
+<td>Remote AT Command Response</td>
+<td><code class="prettyprint">src/xb-atremresp.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x97</code></td>
+<td>Remote Command Response</td>
+<td><code class="prettyprint">src/xb-remresp.lfe</code></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x10</code></td>
+<td>Transmit Request</td>
+<td><code class="prettyprint">src/xb-txreq.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x8B</code></td>
+<td>Tx Status</td>
+<td><code class="prettyprint">src/xb-txstat2.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x89</code></td>
+<td>Tx Status</td>
+<td><code class="prettyprint">src/xb-txstat.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x90</code></td>
+<td>Receive Packet</td>
+<td><code class="prettyprint">src/xb-rx.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x91</code></td>
+<td>Explicit Rx Indicator</td>
+<td><code class="prettyprint">src/xb-exprx.lfe</code></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x11</code></td>
+<td>Explicit Addressing Command Frame</td>
+<td><code class="prettyprint">src/xb-expaddr.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x20</code></td>
+<td>TX IPv4</td>
+<td><code class="prettyprint">src/xb-txipv4.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0xB0</code></td>
+<td>RX IPv4</td>
+<td><code class="prettyprint">src/xb-rxipv4.lfe</code></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x21</code></td>
+<td>Create Source Route</td>
+<td><code class="prettyprint">src/xb-??.lfe</code></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x24</code></td>
+<td>Register Joining Device</td>
+<td><code class="prettyprint">src/xb-regjoin.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0xA4</code></td>
+<td>Register Joining Device Status</td>
+<td><code class="prettyprint">src/xb-regjoinstat.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0xA5</code></td>
+<td>Join Notification Status</td>
+<td><code class="prettyprint">src/xb.joinstatlfe</code></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x82</code></td>
+<td>DIO/ADC Rx64 Indicator</td>
+<td><code class="prettyprint">src/xb-diorx64.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x83</code></td>
+<td>DIO/ADC Rx16 Indicator</td>
+<td><code class="prettyprint">src/xb-diorx16.lfe</code></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x8F</code></td>
+<td>IO Data Sample Rx Indicator</td>
+<td><code class="prettyprint">src/xb-iosamprx.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x92</code></td>
+<td>IO Data Sample Rx Indicator</td>
+<td><code class="prettyprint">src/xb-iosamprx2.lfe</code></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x84</code></td>
+<td>1-Wire Sensor Read-64 Indicator</td>
+<td><code class="prettyprint">src/xb-1wire.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x94</code></td>
+<td>XBee Sensor Read Indicator</td>
+<td><code class="prettyprint">src/xb-snsr.lfe</code></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x85</code></td>
+<td>ND Response Indicator</td>
+<td><code class="prettyprint">src/xb-ndresp.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x86</code></td>
+<td>Promiscuous Output Frame</td>
+<td><code class="prettyprint">src/xb-pof.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x8A</code></td>
+<td>Modem Status</td>
+<td><code class="prettyprint">src/xb-modemstat.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x8E</code></td>
+<td>Aggregate Addressing Update</td>
+<td><code class="prettyprint">src/xb-aggaddr.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x95</code></td>
+<td>Node Identification Indicator</td>
+<td><code class="prettyprint">src/xb-nodeid.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0xA0</code></td>
+<td>Over-the-Air Firmware Update Status</td>
+<td><code class="prettyprint">src/xb-otastat.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0xA2</code></td>
+<td>Device Authenticated Indicator</td>
+<td><code class="prettyprint">src/xb-devauth.lfe</code></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0x8D</code></td>
+<td>Route Information Packet</td>
+<td><code class="prettyprint">src/xb-rtinfo.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0xA1</code></td>
+<td>Route Record Indicator</td>
+<td><code class="prettyprint">src/xb-rtrec.lfe</code></td>
+</tr>
+<tr>
+<td><code class="prettyprint">0xA3</code></td>
+<td>Many to One Route Request Indicator</td>
+<td><code class="prettyprint">src/xb-rtreqm21.lfe</code></td>
+</tr>
+</tbody></table>
+
+          <h1 id="example-usage">Example Usage</h1>
+
+<p>In order to use the LFE API, you need to have done the following:</p>
+
+<ol>
+<li>Updated your XBee radio to have the API firmware installed</li>
+<li>Configured your computer for serial communications with the XBee and know
+the serial device path</li>
+<li>Plugged the XBee into your computer</li>
+<li>Started the LFE REPL</li>
+</ol>
+
+<aside class="success">
+Example &ldquo;tips for success&rdquo; text.
+</aside>
+
+<aside class="notice">
+Example notice text.
+</aside>
+
+<aside class="idea">
+Example idea text.
+</aside>
+
+<aside class="warning">
+Example warning text.
+</aside>
+
+<aside class="danger">
+Example danger text.
+</aside>
+
+<h2 id="raw-serial">Raw Serial</h2>
+<pre class="highlight common_lisp"><code><span class="nb">&gt;</span> <span class="p">(</span><span class="nv">xb:start</span><span class="p">)</span>
+<span class="o">#(</span><span class="nv">ok</span> <span class="nv">started</span><span class="p">)</span>
+<span class="nb">&gt;</span> <span class="p">(</span><span class="nv">xb:open</span> <span class="s">"/dev/tty.usbserial-DA01L2I5"</span> <span class="o">`</span><span class="p">(</span><span class="o">#(</span><span class="nv">speed</span> <span class="mi">9600</span><span class="p">)))</span>
+<span class="o">#(</span><span class="nv">ok</span> <span class="nv">opened</span><span class="p">)</span>
+<span class="nb">&gt;</span> <span class="p">(</span><span class="nv">xb:raw-send</span> <span class="p">(</span><span class="nv">binary</span> <span class="m">#x7e</span> <span class="m">#x00</span> <span class="m">#x04</span> <span class="m">#x08</span> <span class="m">#x52</span> <span class="m">#x4e</span> <span class="m">#x4a</span> <span class="m">#x0d</span><span class="p">))</span>
+<span class="err">#</span><span class="nv">B</span><span class="p">(</span><span class="mi">126</span> <span class="mi">0</span> <span class="mi">5</span> <span class="mi">136</span> <span class="mi">82</span> <span class="mi">78</span> <span class="mi">74</span> <span class="mi">2</span> <span class="mi">139</span><span class="p">)</span>
+<span class="nb">&gt;</span> <span class="p">(</span><span class="nv">xb:close</span><span class="p">)</span>
+<span class="o">#(</span><span class="nv">ok</span> <span class="nv">closed</span><span class="p">)</span>
+</code></pre>
+
+<p>If you want to, you have the option of by-passing the API modules
+and simply making a direct call to the serial device.</p>
+
+          <h1 id="xbee-series-1-api">XBee Series 1 API</h1>
+
+<h2 id="at-commands">AT Commands</h2>
+
+<p>For a list of valid AT commands, see page 57 of the
+<a href="http://ftp1.digi.com/support/documentation/90000982_S.pdf">XBee / XBee-PRO RF Modules 802.15.4 Protocol Product Manual</a></p>
+
+          <h1 id="errors">Errors</h1>
+
+<aside class="notice">This error section is stored in a separate file in `includes/_errors.md`. Slate allows you to optionally separate out your docs into many files&hellip;just save them to the `includes` folder and add them to the top of your `index.md`&rsquo;s frontmatter. Files are included in the order listed.</aside>
+
+<p>The Kittn API uses the following error codes:</p>
+
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Meaning</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>400</td>
+<td>Bad Request &ndash; Your request sucks</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Unauthorized &ndash; Your API key is wrong</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Forbidden &ndash; The kitten requested is hidden for administrators only</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Not Found &ndash; The specified kitten could not be found</td>
+</tr>
+<tr>
+<td>405</td>
+<td>Method Not Allowed &ndash; You tried to access a kitten with an invalid method</td>
+</tr>
+<tr>
+<td>406</td>
+<td>Not Acceptable &ndash; You requested a format that isn&rsquo;t json</td>
+</tr>
+<tr>
+<td>410</td>
+<td>Gone &ndash; The kitten requested has been removed from our servers</td>
+</tr>
+<tr>
+<td>418</td>
+<td>I&rsquo;m a teapot</td>
+</tr>
+<tr>
+<td>429</td>
+<td>Too Many Requests &ndash; You&rsquo;re requesting too many kittens! Slow down!</td>
+</tr>
+<tr>
+<td>500</td>
+<td>Internal Server Error &ndash; We had a problem with our server. Try again later.</td>
+</tr>
+<tr>
+<td>503</td>
+<td>Service Unavailable &ndash; We&rsquo;re temporarially offline for maintanance. Please try again later.</td>
+</tr>
+</tbody></table>
+
+      </div>
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name=""></a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
