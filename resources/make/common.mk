@@ -113,7 +113,7 @@ check: check-unit-with-deps
 check-travis: $(LFETOOL) check
 
 push-all:
-	@echo "Pusing code to github ..."
+	@echo "Pushing code to github ..."
 	git push --all
 	git push --tags
 	@#git push upstream --all
